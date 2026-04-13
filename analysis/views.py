@@ -20,7 +20,7 @@ class RetriggerAnalysisView(APIView):
     permission_classes = [permissions.IsAdminUser]
 
     def post(self, request, report_id):
-        report        = get_object_or_404(LabReport, id=report_id)
+        report = get_object_or_404(LabReport, id=report_id)
         report.status = LabReport.Status.PENDING
         report.save(update_fields=['status'])
         task = run_analysis_pipeline.delay(str(report.id))

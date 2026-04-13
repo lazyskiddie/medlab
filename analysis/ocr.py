@@ -15,45 +15,33 @@ def preprocess_image(image_array: np.ndarray) -> np.ndarray:
         gray = cv2.cvtColor(image_array, cv2.COLOR_BGR2GRAY)
     else:
         gray = image_array
-
     denoised = cv2.fastNlMeansDenoising(gray, h=10)
     thresh   = cv2.adaptiveThreshold(
-        denoised, 255,
-        cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-        cv2.THRESH_BINARY, 31, 2
-    )
-
+        denoised, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 2)
     coords = np.column_stack(np.where(thresh > 0))
     if coords.size > 0:
         angle = cv2.minAreaRect(coords)[-1]
-        if angle < -45:
-            angle = -(90 + angle)
-        else:
-            angle = -angle
+        if angle < -45: angle = -(90 + angle)
+        else:           angle = -angle
         if abs(angle) > 0.5:
             (h, w) = thresh.shape
-            center = (w // 2, h // 2)
-            M      = cv2.getRotationMatrix2D(center, angle, 1.0)
+            M      = cv2.getRotationMatrix2D((w//2, h//2), angle, 1.0)
             thresh = cv2.warpAffine(thresh, M, (w, h),
-                                    flags=cv2.INTER_CUBIC,
-                                    borderMode=cv2.BORDER_REPLICATE)
-
+                                    flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
     h, w = thresh.shape
     if w < 1200:
         scale  = 1200 / w
-        thresh = cv2.resize(thresh, None, fx=scale, fy=scale,
-                            interpolation=cv2.INTER_CUBIC)
+        thresh = cv2.resize(thresh, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
     return thresh
 
 
 def ocr_from_image(file_path: str) -> str:
     try:
-        img       = cv2.imread(file_path)
+        img = cv2.imread(file_path)
         if img is None:
             raise ValueError(f'Could not read image: {file_path}')
         processed = preprocess_image(img)
-        text      = pytesseract.image_to_string(processed, config=r'--oem 3 --psm 6')
-        return text.strip()
+        return pytesseract.image_to_string(processed, config=r'--oem 3 --psm 6').strip()
     except Exception as e:
         logger.error(f'OCR image error: {e}')
         raise
@@ -64,25 +52,21 @@ def ocr_from_pdf(file_path: str) -> str:
     try:
         with pdfplumber.open(file_path) as pdf:
             for page in pdf.pages:
-                page_text = page.extract_text()
-                if page_text:
-                    texts.append(page_text)
+                t = page.extract_text()
+                if t: texts.append(t)
     except Exception as e:
-        logger.warning(f'pdfplumber failed, falling back to image OCR: {e}')
+        logger.warning(f'pdfplumber failed, trying image OCR: {e}')
 
     if not texts:
         try:
             images = convert_from_path(file_path, dpi=300)
             for img in images:
-                img_array = np.array(img)
-                processed = preprocess_image(img_array)
-                text      = pytesseract.image_to_string(processed, config=r'--oem 3 --psm 6')
-                if text.strip():
-                    texts.append(text.strip())
+                processed = preprocess_image(np.array(img))
+                t = pytesseract.image_to_string(processed, config=r'--oem 3 --psm 6')
+                if t.strip(): texts.append(t.strip())
         except Exception as e:
             logger.error(f'PDF image OCR failed: {e}')
             raise
-
     return '\n\n'.join(texts)
 
 
