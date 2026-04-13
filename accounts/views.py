@@ -4,13 +4,13 @@ from .serializers import RegisterSerializer, UserProfileSerializer
 
 
 class RegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = RegisterSerializer
+    queryset           = User.objects.all()
+    serializer_class   = RegisterSerializer
     permission_classes = [permissions.AllowAny]
 
 
 class ProfileView(generics.RetrieveUpdateAPIView):
-    serializer_class = UserProfileSerializer
+    serializer_class   = UserProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):

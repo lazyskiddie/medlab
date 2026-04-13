@@ -7,7 +7,7 @@ from .models import User
 class UserAdmin(BaseUserAdmin):
     list_display  = ('username', 'email', 'role', 'is_staff', 'date_joined')
     list_filter   = ('role', 'is_staff', 'is_active')
-    search_fields = ('username', 'email')
+    search_fields = ('username', 'email', 'first_name', 'last_name')
     fieldsets     = BaseUserAdmin.fieldsets + (
         ('Medical Info', {'fields': ('role', 'phone', 'date_of_birth', 'gender')}),
     )

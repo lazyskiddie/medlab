@@ -19,3 +19,11 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'{self.username} ({self.role})'
+
+    @property
+    def is_patient(self):
+        return self.role == self.Role.PATIENT
+
+    @property
+    def is_doctor(self):
+        return self.role == self.Role.DOCTOR
