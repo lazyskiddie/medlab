@@ -1,0 +1,86 @@
+version: '3.9'
+
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    restart: unless-stopped
+    command: >
+      sh -c "
+        python manage.py setup_project --username admin --password admin1234 &&
+        python manage.py runserver 0.0.0.0:8000
+      "
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - media_files:/app/media
+      - model_weights:/app/ml_models
+    env_file:
+      - .env
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - TESSERACT_CMD=/usr/bin/tesseract
+      - DEBUG=True
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  celery_worker:
+    build: .
+    restart: unless-stopped
+    command: celery -A cloud_medi worker --loglevel=info --concurrency=2
+    volumes:
+      - .:/app
+      - media_files:/app/media
+      - model_weights:/app/ml_models
+    env_file:
+      - .env
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - TESSERACT_CMD=/usr/bin/tesseract
+      - DEBUG=True
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  celery_beat:
+    build: .
+    restart: unless-stopped
+    command: >
+      celery -A cloud_medi beat --loglevel=info
+      --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - .:/app
+      - media_files:/app/media
+    env_file:
+      - .env
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - DEBUG=True
+    depends_on:
+      redis:
+        condition: service_healthy
+
+volumes:
+  redis_data:
+  media_files:
+  model_weights:

@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedLab — Lab Report Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & tokens ────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --teal:       #1D9E75;
+  --teal-light: #E1F5EE;
+  --teal-dark:  #0F6E56;
+  --amber:      #BA7517;
+  --amber-bg:   #FAEEDA;
+  --red:        #E24B4A;
+  --red-bg:     #FCEBEB;
+  --blue:       #185FA5;
+  --blue-bg:    #E6F1FB;
+  --gray-50:    #F8F7F4;
+  --gray-100:   #EFEDE8;
+  --gray-200:   #D3D1C7;
+  --gray-500:   #888780;
+  --gray-800:   #2C2C2A;
+  --white:      #FFFFFF;
+  --serif:      'DM Serif Display', Georgia, serif;
+  --sans:       'DM Sans', system-ui, sans-serif;
+  --radius:     12px;
+  --shadow:     0 2px 12px rgba(0,0,0,0.08);
+  --shadow-lg:  0 8px 32px rgba(0,0,0,0.12);
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--gray-50);
+  color: var(--gray-800);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── Utility ───────────────────────────────────────────────────────────────── */
+.hidden   { display: none !important; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 22px; border-radius: 8px; border: none;
+  font-family: var(--sans); font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: all .18s; text-decoration: none;
+}
+.btn-primary   { background: var(--teal);    color: #fff; }
+.btn-primary:hover   { background: var(--teal-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(29,158,117,.3); }
+.btn-outline   { background: transparent; color: var(--teal); border: 1.5px solid var(--teal); }
+.btn-outline:hover   { background: var(--teal-light); }
+.btn-ghost     { background: var(--gray-100); color: var(--gray-800); }
+.btn-ghost:hover     { background: var(--gray-200); }
+.btn-danger    { background: var(--red-bg);  color: var(--red); border: 1.5px solid #F09595; }
+.btn-sm        { padding: 6px 14px; font-size: 13px; }
+input, textarea {
+  font-family: var(--sans); font-size: 14px;
+  border: 1.5px solid var(--gray-200); border-radius: 8px;
+  padding: 10px 14px; width: 100%; background: var(--white);
+  transition: border-color .15s, box-shadow .15s; outline: none;
+  color: var(--gray-800);
+}
+input:focus, textarea:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(29,158,117,.12);
+}
+label { font-size: 13px; font-weight: 500; color: var(--gray-500); display: block; margin-bottom: 6px; }
+.form-group { margin-bottom: 16px; }
+.badge {
+  display: inline-block; padding: 2px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em;
+}
+.badge-normal   { background: var(--teal-light);  color: var(--teal-dark); }
+.badge-mild     { background: var(--amber-bg);     color: var(--amber); }
+.badge-moderate { background: #FAECE7;             color: #993C1D; }
+.badge-severe   { background: var(--red-bg);       color: var(--red); }
+.badge-pending     { background: var(--gray-100);  color: var(--gray-500); }
+.badge-processing  { background: var(--blue-bg);   color: var(--blue); }
+.badge-completed   { background: var(--teal-light);color: var(--teal-dark); }
+.badge-failed      { background: var(--red-bg);    color: var(--red); }
+.card {
+  background: var(--white); border-radius: var(--radius);
+  box-shadow: var(--shadow); border: 1px solid var(--gray-100);
+}
+
+/* ── Auth screen ───────────────────────────────────────────────────────────── */
+#auth-screen {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #0F6E56 0%, #1D9E75 50%, #5DCAA5 100%);
+}
+.auth-card {
+  background: var(--white); border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  padding: 48px 40px; width: 420px; max-width: calc(100vw - 32px);
+}
+.auth-logo {
+  font-family: var(--serif); font-size: 32px; color: var(--teal-dark);
+  margin-bottom: 6px;
+}
+.auth-tagline { font-size: 14px; color: var(--gray-500); margin-bottom: 32px; }
+.auth-tabs { display: flex; gap: 4px; margin-bottom: 28px; background: var(--gray-100); padding: 4px; border-radius: 10px; }
+.auth-tab {
+  flex: 1; padding: 8px; border: none; background: transparent;
+  font-family: var(--sans); font-size: 13px; font-weight: 500;
+  border-radius: 7px; cursor: pointer; transition: all .15s;
+  color: var(--gray-500);
+}
+.auth-tab.active { background: var(--white); color: var(--teal-dark); box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+.auth-error { background: var(--red-bg); color: var(--red); border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 16px; }
+
+/* ── App shell ─────────────────────────────────────────────────────────────── */
+#app { display: flex; min-height: 100vh; }
+
+/* ── Sidebar ───────────────────────────────────────────────────────────────── */
+.sidebar {
+  width: 240px; min-height: 100vh;
+  background: var(--white); border-right: 1px solid var(--gray-100);
+  display: flex; flex-direction: column;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  flex-shrink: 0;
+}
+.sidebar-logo { padding: 28px 24px 20px; font-family: var(--serif); font-size: 24px; color: var(--teal-dark); }
+.sidebar-logo span { font-style: italic; color: var(--teal); }
+.nav-section { padding: 8px 12px; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--gray-200); margin-top: 8px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px; margin: 2px 8px; border-radius: 8px;
+  font-size: 14px; font-weight: 400; color: var(--gray-800);
+  cursor: pointer; transition: all .15s; user-select: none;
+}
+.nav-item:hover   { background: var(--gray-50); }
+.nav-item.active  { background: var(--teal-light); color: var(--teal-dark); font-weight: 500; }
+.nav-icon { font-size: 16px; width: 20px; text-align: center; }
+.sidebar-footer { margin-top: auto; padding: 20px 16px; border-top: 1px solid var(--gray-100); }
+.user-pill { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 10px; background: var(--gray-50); }
+.user-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--teal); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; flex-shrink: 0;
+}
+.user-name  { font-size: 13px; font-weight: 500; }
+.user-role  { font-size: 11px; color: var(--gray-500); }
+
+/* ── Main content ──────────────────────────────────────────────────────────── */
+.main { flex: 1; padding: 32px 36px; max-width: 960px; overflow-x: hidden; }
+.page-title { font-family: var(--serif); font-size: 30px; color: var(--gray-800); margin-bottom: 4px; }
+.page-sub   { font-size: 14px; color: var(--gray-500); margin-bottom: 28px; }
+
+/* ── Upload zone ───────────────────────────────────────────────────────────── */
+.upload-zone {
+  border: 2px dashed var(--gray-200); border-radius: var(--radius);
+  padding: 48px 32px; text-align: center;
+  cursor: pointer; transition: all .2s;
+  background: var(--white);
+}
+.upload-zone:hover, .upload-zone.drag-over {
+  border-color: var(--teal); background: var(--teal-light);
+}
+.upload-icon { font-size: 40px; margin-bottom: 12px; }
+.upload-text  { font-size: 16px; font-weight: 500; margin-bottom: 6px; }
+.upload-hint  { font-size: 13px; color: var(--gray-500); }
+.upload-actions { margin-top: 24px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.file-list { margin-top: 20px; display: flex; flex-direction: column; gap: 8px; }
+.file-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px; background: var(--gray-50);
+  border-radius: 8px; font-size: 13px;
+}
+.file-item-name { flex: 1; font-weight: 500; }
+.file-item-size { color: var(--gray-500); }
+.file-remove    { cursor: pointer; color: var(--gray-500); font-size: 16px; }
+.file-remove:hover { color: var(--red); }
+
+/* ── Upload progress ───────────────────────────────────────────────────────── */
+.upload-progress { margin-top: 16px; }
+.progress-bar-wrap { background: var(--gray-100); border-radius: 4px; height: 6px; overflow: hidden; margin: 8px 0; }
+.progress-bar      { height: 100%; background: var(--teal); border-radius: 4px; transition: width .3s ease; }
+.progress-label    { font-size: 12px; color: var(--gray-500); }
+
+/* ── Reports list ──────────────────────────────────────────────────────────── */
+.reports-grid { display: flex; flex-direction: column; gap: 12px; }
+.report-card  { padding: 18px 20px; cursor: pointer; transition: box-shadow .15s; }
+.report-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.1); }
+.report-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.report-card-meta   { display: flex; gap: 16px; font-size: 12px; color: var(--gray-500); }
+.report-card-name   { font-weight: 500; font-size: 15px; }
+.report-card-conditions { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+.condition-tag { background: var(--blue-bg); color: var(--blue); font-size: 11px; padding: 3px 10px; border-radius: 20px; }
+
+/* ── Result detail ─────────────────────────────────────────────────────────── */
+.result-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+.result-severity-block { text-align: right; }
+.severity-label { font-size: 11px; color: var(--gray-500); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+.severity-big   { font-family: var(--serif); font-size: 28px; }
+.summary-box { background: var(--gray-50); border-left: 3px solid var(--teal); border-radius: 0 8px 8px 0; padding: 16px 20px; margin-bottom: 24px; font-size: 14px; line-height: 1.7; }
+.section-title  { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--gray-500); margin-bottom: 12px; }
+.flags-table    { width: 100%; border-collapse: collapse; font-size: 13px; }
+.flags-table th { text-align: left; padding: 8px 12px; background: var(--gray-50); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--gray-500); }
+.flags-table td { padding: 10px 12px; border-top: 1px solid var(--gray-100); }
+.flag-high   { color: #993C1D; font-weight: 600; }
+.flag-low    { color: var(--blue);  font-weight: 600; }
+.flag-normal { color: var(--teal-dark); }
+.flag-critical { background: var(--red-bg); }
+.flag-bar-wrap { width: 80px; height: 6px; background: var(--gray-100); border-radius: 3px; position: relative; display: inline-block; }
+.flag-bar      { height: 100%; border-radius: 3px; position: absolute; }
+
+/* ── Toast ─────────────────────────────────────────────────────────────────── */
+#toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--gray-800); color: #fff;
+  padding: 12px 20px; border-radius: 10px;
+  font-size: 13px; box-shadow: var(--shadow-lg);
+  transform: translateY(80px); opacity: 0;
+  transition: all .25s; z-index: 9999;
+}
+#toast.show { transform: translateY(0); opacity: 1; }
+#toast.toast-error { background: var(--red); }
+
+/* ── Empty state ───────────────────────────────────────────────────────────── */
+.empty-state { text-align: center; padding: 64px 24px; color: var(--gray-500); }
+.empty-state-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state-title { font-family: var(--serif); font-size: 22px; color: var(--gray-800); margin-bottom: 8px; }
+
+/* ── Spinner ───────────────────────────────────────────────────────────────── */
+.spinner { display: inline-block; width: 20px; height: 20px; border: 2.5px solid var(--gray-200); border-top-color: var(--teal); border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .sidebar { display: none; }
+  .main    { padding: 20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Auth screen ────────────────────────────────────────────────────────── -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">Med<span>Lab</span></div>
+    <div class="auth-tagline">Intelligent lab report analysis — fully private, no cloud AI</div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Sign in</button>
+      <button class="auth-tab"        onclick="switchTab('register')">Create account</button>
+    </div>
+
+    <div id="auth-error" class="auth-error hidden"></div>
+
+    <!-- Login form -->
+    <div id="tab-login">
+      <div class="form-group">
+        <label>Username</label>
+        <input id="login-username" type="text" placeholder="your_username" autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="login()">
+        <span id="login-spinner" class="spinner hidden"></span>
+        Sign in
+      </button>
+    </div>
+
+    <!-- Register form -->
+    <div id="tab-register" class="hidden">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-group">
+          <label>First name</label>
+          <input id="reg-first" type="text" placeholder="John">
+        </div>
+        <div class="form-group">
+          <label>Last name</label>
+          <input id="reg-last" type="text" placeholder="Doe">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Username</label>
+        <input id="reg-username" type="text" placeholder="john_doe">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input id="reg-email" type="email" placeholder="john@example.com">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-group">
+          <label>Gender</label>
+          <select id="reg-gender" style="padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:8px;font-family:var(--sans);font-size:14px;width:100%;background:white;color:var(--gray-800);">
+            <option value="">Select</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Date of birth</label>
+          <input id="reg-dob" type="date">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input id="reg-password" type="password" placeholder="Min 8 characters">
+      </div>
+      <div class="form-group">
+        <label>Confirm password</label>
+        <input id="reg-password2" type="password" placeholder="Repeat password">
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="register()">
+        <span id="reg-spinner" class="spinner hidden"></span>
+        Create account
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Main app ───────────────────────────────────────────────────────────── -->
+<div id="app" class="hidden">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">Med<span>Lab</span></div>
+    <div class="nav-section">Menu</div>
+    <div class="nav-item active" onclick="showPage('upload')" id="nav-upload">
+      <span class="nav-icon">⬆</span> Upload report
+    </div>
+    <div class="nav-item" onclick="showPage('reports')" id="nav-reports">
+      <span class="nav-icon">📋</span> My reports
+    </div>
+    <div class="nav-section">Account</div>
+    <div class="nav-item" onclick="logout()">
+      <span class="nav-icon">⬡</span> Sign out
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-pill">
+        <div class="user-avatar" id="user-avatar">?</div>
+        <div>
+          <div class="user-name" id="user-name-display">—</div>
+          <div class="user-role" id="user-role-display">—</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main">
+
+    <!-- ── Upload page ──────────────────────────────────────────────────── -->
+    <div id="page-upload">
+      <div class="page-title">Upload lab report</div>
+      <div class="page-sub">Upload an image or PDF — we'll extract and analyse all values automatically.</div>
+
+      <div class="card" style="padding:24px;">
+        <div class="upload-zone" id="drop-zone"
+             ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)"
+             onclick="document.getElementById('file-input').click()">
+          <div class="upload-icon">🧪</div>
+          <div class="upload-text">Drop your lab report here</div>
+          <div class="upload-hint">or click to browse &nbsp;·&nbsp; JPG, PNG, PDF &nbsp;·&nbsp; max 20 MB each</div>
+          <input type="file" id="file-input" accept=".jpg,.jpeg,.png,.pdf" multiple style="display:none" onchange="onFileSelect(event)">
+        </div>
+
+        <div class="file-list" id="file-list"></div>
+
+        <div class="upload-progress hidden" id="upload-progress">
+          <div class="progress-label" id="progress-label">Uploading…</div>
+          <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
+        </div>
+
+        <div class="upload-actions">
+          <button class="btn btn-primary" onclick="submitFiles()" id="submit-btn" disabled>
+            <span id="submit-spinner" class="spinner hidden"></span>
+            Analyse reports
+          </button>
+          <button class="btn btn-ghost" onclick="clearFiles()">Clear</button>
+        </div>
+      </div>
+
+      <!-- Analysis tips -->
+      <div style="margin-top:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
+        <div class="card" style="padding:16px 18px;">
+          <div style="font-size:20px;margin-bottom:8px;">📸</div>
+          <div style="font-weight:500;margin-bottom:4px;font-size:14px;">Better photo = better results</div>
+          <div style="font-size:13px;color:var(--gray-500);">Ensure the report is fully visible, well-lit, and not blurry.</div>
+        </div>
+        <div class="card" style="padding:16px 18px;">
+          <div style="font-size:20px;margin-bottom:8px;">⏱</div>
+          <div style="font-weight:500;margin-bottom:4px;font-size:14px;">Analysis takes ~30 seconds</div>
+          <div style="font-size:13px;color:var(--gray-500);">We'll extract all values and generate a plain-English summary.</div>
+        </div>
+        <div class="card" style="padding:16px 18px;">
+          <div style="font-size:20px;margin-bottom:8px;">🔒</div>
+          <div style="font-weight:500;margin-bottom:4px;font-size:14px;">Fully private</div>
+          <div style="font-size:13px;color:var(--gray-500);">No data leaves this server. All AI runs locally.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Reports list page ────────────────────────────────────────────── -->
+    <div id="page-reports" class="hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+        <div>
+          <div class="page-title">My reports</div>
+          <div class="page-sub">All your uploaded lab reports and their analysis results.</div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="loadReports()">
+          <span id="reports-spinner" class="spinner hidden"></span>
+          Refresh
+        </button>
+      </div>
+
+      <div id="reports-list" class="reports-grid">
+        <div class="empty-state">
+          <div class="spinner" style="width:32px;height:32px;margin:0 auto 16px;"></div>
+          <div>Loading reports…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Result detail page ───────────────────────────────────────────── -->
+    <div id="page-result" class="hidden">
+      <div style="margin-bottom:20px;">
+        <button class="btn btn-ghost btn-sm" onclick="showPage('reports')">← Back to reports</button>
+      </div>
+      <div id="result-content"></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+// ── Config ────────────────────────────────────────────────────────────────────
+const API = '';  // empty = same origin; set to 'http://localhost:8000' if serving separately
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let accessToken  = localStorage.getItem('medlab_access')  || '';
+let refreshToken = localStorage.getItem('medlab_refresh') || '';
+let currentUser  = null;
+let selectedFiles = [];
+let pollTimers   = {};
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  if (accessToken) { bootApp(); } else { showAuth(); }
+});
+
+async function bootApp() {
+  try {
+    currentUser = await api('GET', '/api/accounts/profile/');
+    showApp();
+    loadReports();
+  } catch {
+    accessToken = ''; localStorage.removeItem('medlab_access');
+    showAuth();
+  }
+}
+
+// ── Auth UI ───────────────────────────────────────────────────────────────────
+function showAuth() {
+  document.getElementById('auth-screen').classList.remove('hidden');
+  document.getElementById('app').classList.add('hidden');
+}
+function showApp() {
+  document.getElementById('auth-screen').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  const init = (currentUser.first_name || currentUser.username).charAt(0).toUpperCase();
+  document.getElementById('user-avatar').textContent        = init;
+  document.getElementById('user-name-display').textContent  = currentUser.first_name
+    ? `${currentUser.first_name} ${currentUser.last_name}`.trim()
+    : currentUser.username;
+  document.getElementById('user-role-display').textContent  = currentUser.role;
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach((t,i) =>
+    t.classList.toggle('active', (i === 0) === (tab === 'login'))
+  );
+  document.getElementById('tab-login').classList.toggle('hidden',    tab !== 'login');
+  document.getElementById('tab-register').classList.toggle('hidden', tab !== 'register');
+  document.getElementById('auth-error').classList.add('hidden');
+}
+
+async function login() {
+  const u = q('login-username'), p = q('login-password');
+  if (!u || !p) return showError('auth-error', 'Please enter username and password.');
+  setLoading('login-spinner', true);
+  try {
+    const data = await apiNoAuth('POST', '/api/auth/token/', { username: u, password: p });
+    accessToken  = data.access;
+    refreshToken = data.refresh;
+    localStorage.setItem('medlab_access',  accessToken);
+    localStorage.setItem('medlab_refresh', refreshToken);
+    await bootApp();
+  } catch(e) {
+    showError('auth-error', 'Invalid username or password.');
+  } finally { setLoading('login-spinner', false); }
+}
+
+async function register() {
+  const body = {
+    username:      q('reg-username'),
+    email:         q('reg-email'),
+    password:      q('reg-password'),
+    password2:     q('reg-password2'),
+    first_name:    q('reg-first'),
+    last_name:     q('reg-last'),
+    gender:        document.getElementById('reg-gender').value,
+    date_of_birth: q('reg-dob') || undefined,
+    role: 'patient',
+  };
+  if (!body.username || !body.password) return showError('auth-error', 'Username and password are required.');
+  if (body.password !== body.password2) return showError('auth-error', 'Passwords do not match.');
+  setLoading('reg-spinner', true);
+  try {
+    await apiNoAuth('POST', '/api/accounts/register/', body);
+    toast('Account created! Signing you in…');
+    document.getElementById('login-username').value = body.username;
+    document.getElementById('login-password').value = body.password;
+    switchTab('login');
+    await login();
+  } catch(e) {
+    showError('auth-error', e.message || 'Registration failed. Try a different username.');
+  } finally { setLoading('reg-spinner', false); }
+}
+
+function logout() {
+  accessToken = refreshToken = '';
+  localStorage.clear();
+  currentUser = null;
+  selectedFiles = [];
+  showAuth();
+}
+
+// ── Navigation ────────────────────────────────────────────────────────────────
+function showPage(page) {
+  ['upload','reports','result'].forEach(p => {
+    document.getElementById(`page-${p}`).classList.toggle('hidden', p !== page);
+    const nav = document.getElementById(`nav-${p}`);
+    if (nav) nav.classList.toggle('active', p === page);
+  });
+  if (page === 'reports') loadReports();
+}
+
+// ── File upload ───────────────────────────────────────────────────────────────
+function onDragOver(e)  { e.preventDefault(); document.getElementById('drop-zone').classList.add('drag-over'); }
+function onDragLeave(e) { document.getElementById('drop-zone').classList.remove('drag-over'); }
+function onDrop(e)      { e.preventDefault(); onDragLeave(e); addFiles(e.dataTransfer.files); }
+function onFileSelect(e){ addFiles(e.target.files); e.target.value = ''; }
+
+function addFiles(fileList) {
+  const allowed  = ['image/jpeg','image/jpg','image/png','application/pdf'];
+  const maxBytes = 20 * 1024 * 1024;
+  Array.from(fileList).forEach(f => {
+    if (!allowed.includes(f.type)) { toast(`${f.name}: unsupported type`, true); return; }
+    if (f.size > maxBytes)         { toast(`${f.name}: exceeds 20 MB`, true);    return; }
+    if (!selectedFiles.find(x => x.name === f.name && x.size === f.size)) {
+      selectedFiles.push(f);
+    }
+  });
+  renderFileList();
+}
+
+function renderFileList() {
+  const list = document.getElementById('file-list');
+  list.innerHTML = selectedFiles.map((f, i) => `
+    <div class="file-item">
+      <span style="font-size:18px">${f.type === 'application/pdf' ? '📄' : '🖼'}</span>
+      <span class="file-item-name">${esc(f.name)}</span>
+      <span class="file-item-size">${(f.size/1024).toFixed(0)} KB</span>
+      <span class="file-remove" onclick="removeFile(${i})">✕</span>
+    </div>`).join('');
+  document.getElementById('submit-btn').disabled = selectedFiles.length === 0;
+}
+
+function removeFile(i) { selectedFiles.splice(i, 1); renderFileList(); }
+function clearFiles()  { selectedFiles = []; renderFileList(); }
+
+async function submitFiles() {
+  if (!selectedFiles.length) return;
+  setLoading('submit-spinner', true);
+  document.getElementById('upload-progress').classList.remove('hidden');
+
+  const total = selectedFiles.length;
+  let done = 0;
+
+  for (const file of selectedFiles) {
+    setProgress(Math.round(done / total * 100), `Uploading ${file.name}…`);
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const report = await apiForm('POST', '/api/reports/upload/', fd);
+      done++;
+      setProgress(Math.round(done / total * 100), `Uploaded ${file.name} — analysing…`);
+      startPolling(report.id);
+    } catch(e) {
+      toast(`${file.name}: upload failed`, true);
+    }
+  }
+
+  setProgress(100, 'All files uploaded — analysis running in background.');
+  toast(`${done} report${done > 1 ? 's' : ''} submitted for analysis.`);
+  selectedFiles = [];
+  renderFileList();
+  setLoading('submit-spinner', false);
+
+  setTimeout(() => {
+    document.getElementById('upload-progress').classList.add('hidden');
+    setProgress(0, '');
+    showPage('reports');
+  }, 1500);
+}
+
+function setProgress(pct, label) {
+  document.getElementById('progress-bar').style.width  = pct + '%';
+  document.getElementById('progress-label').textContent = label;
+}
+
+// ── Reports list ──────────────────────────────────────────────────────────────
+async function loadReports() {
+  setLoading('reports-spinner', true);
+  try {
+    const data = await api('GET', '/api/reports/');
+    const reports = data.results || data;
+    renderReports(reports);
+    reports.filter(r => r.status === 'pending' || r.status === 'processing')
+           .forEach(r => startPolling(r.id));
+  } catch(e) {
+    document.getElementById('reports-list').innerHTML =
+      `<div class="empty-state"><div>Failed to load reports.</div></div>`;
+  } finally { setLoading('reports-spinner', false); }
+}
+
+function renderReports(reports) {
+  const list = document.getElementById('reports-list');
+  if (!reports.length) {
+    list.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">🧪</div>
+        <div class="empty-state-title">No reports yet</div>
+        <div>Upload your first lab report to get started.</div>
+        <br><button class="btn btn-primary btn-sm" onclick="showPage('upload')">Upload report</button>
+      </div>`;
+    return;
+  }
+  list.innerHTML = reports.map(r => {
+    const date   = new Date(r.uploaded_at).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+    const result = r.result;
+    const sev    = result?.severity || '';
+    const conds  = result?.conditions_detected || [];
+    return `
+    <div class="card report-card" onclick="openReport('${r.id}')">
+      <div class="report-card-header">
+        <span class="report-card-name">${esc(r.original_name || 'Lab report')}</span>
+        <div style="display:flex;gap:8px;align-items:center;">
+          ${sev ? `<span class="badge badge-${sev}">${sev}</span>` : ''}
+          <span class="badge badge-${r.status}">${r.status}</span>
+        </div>
+      </div>
+      <div class="report-card-meta">
+        <span>📅 ${date}</span>
+        <span>${r.file_type.toUpperCase()}</span>
+        ${result ? `<span>${result.flagged_items?.filter(f=>f.status!=='normal').length || 0} abnormal values</span>` : ''}
+      </div>
+      ${conds.length ? `
+        <div class="report-card-conditions">
+          ${conds.slice(0,3).map(c => `<span class="condition-tag">${esc(c.name)}</span>`).join('')}
+          ${conds.length > 3 ? `<span class="condition-tag">+${conds.length-3} more</span>` : ''}
+        </div>` : ''}
+      ${r.status === 'processing' ? `
+        <div style="margin-top:10px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--gray-500);">
+          <span class="spinner" style="width:14px;height:14px;"></span> Analysing…
+        </div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ── Report detail ─────────────────────────────────────────────────────────────
+async function openReport(id) {
+  showPage('result');
+  document.getElementById('result-content').innerHTML =
+    `<div style="text-align:center;padding:48px"><span class="spinner" style="width:32px;height:32px"></span></div>`;
+  try {
+    const r = await api('GET', `/api/reports/${id}/`);
+    renderResult(r);
+  } catch(e) {
+    document.getElementById('result-content').innerHTML =
+      `<div class="empty-state">Failed to load result.</div>`;
+  }
+}
+
+function renderResult(r) {
+  const res  = r.result;
+  const date = new Date(r.uploaded_at).toLocaleString('en-IN');
+
+  if (!res || r.status !== 'completed') {
+    document.getElementById('result-content').innerHTML = `
+      <div class="card" style="padding:32px;text-align:center;">
+        <div class="spinner" style="width:32px;height:32px;margin:0 auto 16px;"></div>
+        <div style="font-weight:500">Analysis in progress…</div>
+        <div style="font-size:13px;color:var(--gray-500);margin-top:6px;">This usually takes under a minute. Status: <strong>${r.status}</strong></div>
+      </div>`;
+    if (r.status === 'processing' || r.status === 'pending') startPolling(r.id);
+    return;
+  }
+
+  const flags    = res.flagged_items || [];
+  const abnormal = flags.filter(f => f.status !== 'normal');
+  const critical = flags.filter(f => f.is_critical);
+  const conds    = res.conditions_detected || [];
+
+  const sevColor = { normal:'var(--teal-dark)', mild:'var(--amber)', moderate:'#993C1D', severe:'var(--red)' };
+
+  document.getElementById('result-content').innerHTML = `
+
+    <div class="result-header">
+      <div>
+        <div style="font-family:var(--serif);font-size:26px;margin-bottom:4px;">${esc(r.original_name || 'Lab report')}</div>
+        <div style="font-size:13px;color:var(--gray-500);">Uploaded ${date} &nbsp;·&nbsp; ${r.file_type.toUpperCase()}</div>
+      </div>
+      <div class="result-severity-block">
+        <div class="severity-label">Overall severity</div>
+        <div class="severity-big" style="color:${sevColor[res.severity] || '#333'}">${res.severity}</div>
+        ${res.pdf_report ? `<a href="${API}${res.pdf_report}" target="_blank" class="btn btn-outline btn-sm" style="margin-top:8px;">⬇ Download PDF</a>` : ''}
+      </div>
+    </div>
+
+    ${critical.length ? `
+      <div style="background:var(--red-bg);border:1.5px solid #F09595;border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:14px;">
+        <strong style="color:var(--red);">⚠ Critical values detected</strong><br>
+        <span style="color:#A32D2D;">${critical.map(f=>`${f.test} (${f.value} ${f.unit})`).join(', ')}</span><br>
+        <span style="font-size:13px;color:#791F1F;">Please consult a doctor immediately.</span>
+      </div>` : ''}
+
+    ${res.summary ? `
+      <div class="section-title">Summary</div>
+      <div class="summary-box">${esc(res.summary)}</div>` : ''}
+
+    ${conds.length ? `
+      <div class="section-title" style="margin-top:20px;">Detected conditions</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;">
+        ${conds.map(c => `
+          <div style="padding:8px 14px;border-radius:8px;background:var(--blue-bg);font-size:13px;">
+            <span style="font-weight:500;color:var(--blue);">${esc(c.name)}</span>
+            <span style="color:var(--gray-500);margin-left:6px;">${c.confidence}</span>
+          </div>`).join('')}
+      </div>` : ''}
+
+    <div class="section-title" style="margin-top:20px;">
+      Test results &nbsp;<span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:12px;">${abnormal.length} of ${flags.length} abnormal</span>
+    </div>
+    ${flags.length ? `
+      <div class="card" style="overflow:hidden;">
+        <table class="flags-table">
+          <thead>
+            <tr>
+              <th>Test</th><th>Value</th><th>Reference</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${flags.map(f => `
+              <tr class="${f.is_critical ? 'flag-critical' : ''}">
+                <td style="font-weight:${f.status!=='normal'?'500':'400'}">${esc(f.test)}</td>
+                <td class="flag-${f.status}">${f.value} ${esc(f.unit)}</td>
+                <td style="color:var(--gray-500);font-size:12px;">${f.low} – ${f.high}</td>
+                <td>
+                  <span class="badge badge-${f.status==='normal'?'normal':f.is_critical?'severe':'mild'}">
+                    ${f.status}${f.is_critical ? ' ⚠' : ''}
+                  </span>
+                </td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>` : `<div style="color:var(--gray-500);font-size:14px;">No values could be extracted from this report.</div>`}
+  `;
+}
+
+// ── Polling (checks analysis status every 4s) ─────────────────────────────────
+function startPolling(reportId) {
+  if (pollTimers[reportId]) return;
+  pollTimers[reportId] = setInterval(async () => {
+    try {
+      const s = await api('GET', `/api/analysis/status/${reportId}/`);
+      if (s.status === 'completed' || s.status === 'failed') {
+        clearInterval(pollTimers[reportId]);
+        delete pollTimers[reportId];
+        if (s.status === 'completed') {
+          toast('Analysis complete! Refreshing…');
+          loadReports();
+          // If user is viewing this report, refresh it
+          if (!document.getElementById('page-result').classList.contains('hidden')) {
+            openReport(reportId);
+          }
+        }
+      }
+    } catch { /* ignore */ }
+  }, 4000);
+}
+
+// ── API helpers ───────────────────────────────────────────────────────────────
+async function api(method, path, body) {
+  const opts = {
+    method,
+    headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+  };
+  if (body) opts.body = JSON.stringify(body);
+  let res = await fetch(API + path, opts);
+  if (res.status === 401) {
+    // Try refresh
+    const rr = await fetch(API + '/api/auth/token/refresh/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh: refreshToken }),
+    });
+    if (rr.ok) {
+      const d = await rr.json();
+      accessToken = d.access;
+      localStorage.setItem('medlab_access', accessToken);
+      opts.headers['Authorization'] = `Bearer ${accessToken}`;
+      res = await fetch(API + path, opts);
+    } else {
+      logout();
+      throw new Error('Session expired');
+    }
+  }
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(Object.values(err).flat().join(' ') || res.statusText);
+  }
+  return res.status === 204 ? null : res.json();
+}
+
+async function apiForm(method, path, formData) {
+  let res = await fetch(API + path, {
+    method,
+    headers: { 'Authorization': `Bearer ${accessToken}` },
+    body: formData,
+  });
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+async function apiNoAuth(method, path, body) {
+  const res = await fetch(API + path, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(Object.values(err).flat().join(' ') || res.statusText);
+  }
+  return res.json();
+}
+
+// ── UI helpers ────────────────────────────────────────────────────────────────
+function q(id)   { return document.getElementById(id)?.value?.trim(); }
+function esc(s)  { return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function showError(id, msg) { const el = document.getElementById(id); el.textContent = msg; el.classList.remove('hidden'); }
+function setLoading(spinnerId, on) { document.getElementById(spinnerId)?.classList.toggle('hidden', !on); }
+
+let toastTimer;
+function toast(msg, error=false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className   = 'show' + (error ? ' toast-error' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.className = '', 3500);
+}
+</script>
+</body>
+</html>

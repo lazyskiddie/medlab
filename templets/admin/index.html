@@ -1,0 +1,221 @@
+{% extends "admin/index.html" %}
+{% load i18n %}
+
+{% block content %}
+
+{# ── Live stats dashboard ─────────────────────────────────────────────────── #}
+<div id="medlab-dashboard" style="margin-bottom:24px;">
+
+  <h2 style="font-size:16px;font-weight:500;margin:0 0 12px;color:var(--body-fg,#333)">
+    System overview
+  </h2>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px;">
+
+    <div class="stat-card" id="sc-reports">
+      <div class="stat-label">Lab reports</div>
+      <div class="stat-value" id="sv-reports">—</div>
+      <div class="stat-sub"  id="ss-reports">loading…</div>
+    </div>
+
+    <div class="stat-card" id="sc-training">
+      <div class="stat-label">Training samples</div>
+      <div class="stat-value" id="sv-training">—</div>
+      <div class="stat-sub"  id="ss-training">loading…</div>
+    </div>
+
+    <div class="stat-card" id="sc-reviewed">
+      <div class="stat-label">Doctor-reviewed</div>
+      <div class="stat-value" id="sv-reviewed">—</div>
+      <div class="stat-sub"  id="ss-reviewed">loading…</div>
+    </div>
+
+    <div class="stat-card" id="sc-jobs">
+      <div class="stat-label">Training jobs</div>
+      <div class="stat-value" id="sv-jobs">—</div>
+      <div class="stat-sub"  id="ss-jobs">loading…</div>
+    </div>
+
+    <div class="stat-card" id="sc-auto">
+      <div class="stat-label">Auto-training</div>
+      <div class="stat-value" id="sv-auto">—</div>
+      <div class="stat-sub"  id="ss-auto">loading…</div>
+    </div>
+
+    <div class="stat-card" id="sc-health">
+      <div class="stat-label">System health</div>
+      <div class="stat-value" id="sv-health">—</div>
+      <div class="stat-sub"  id="ss-health">loading…</div>
+    </div>
+
+  </div>
+
+  {# ── Model readiness banner ──────────────────────────────────────────────── #}
+  <div id="model-banner" style="display:none;padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:16px;"></div>
+
+  {# ── Next auto-training progress bar ────────────────────────────────────── #}
+  <div id="training-progress-wrap" style="display:none;margin-bottom:16px;">
+    <div style="font-size:13px;color:var(--body-quiet-color,#666);margin-bottom:4px;">
+      Progress to next auto-training:
+      <span id="progress-label">—</span>
+    </div>
+    <div style="background:var(--hairline-color,#e8e8e8);border-radius:4px;height:8px;overflow:hidden;">
+      <div id="progress-bar"
+           style="height:100%;background:#1D9E75;border-radius:4px;width:0%;transition:width 0.6s ease;">
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{# ── Django default app list ─────────────────────────────────────────────── #}
+{{ block.super }}
+
+{# ── Styles ──────────────────────────────────────────────────────────────── #}
+<style>
+.stat-card {
+  background: var(--darkened-bg, #f8f8f8);
+  border: 1px solid var(--hairline-color, #e8e8e8);
+  border-radius: 8px;
+  padding: 14px 16px;
+  min-width: 0;
+}
+.stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--body-quiet-color, #888);
+  margin-bottom: 6px;
+}
+.stat-value {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--body-fg, #222);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-sub {
+  font-size: 12px;
+  color: var(--body-quiet-color, #888);
+}
+</style>
+
+{# ── Dashboard JS — fetches /api/health/ and /api/training/stats/ ─────────── #}
+<script>
+(function () {
+  const getCookie = name => {
+    const m = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return m ? decodeURIComponent(m[2]) : null;
+  };
+
+  const set = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  };
+
+  async function fetchJSON(url) {
+    const r = await fetch(url, {
+      headers: { 'X-CSRFToken': getCookie('csrftoken') }
+    });
+    if (!r.ok) throw new Error(r.statusText);
+    return r.json();
+  }
+
+  async function loadHealth() {
+    try {
+      const d = await fetchJSON('/api/health/');
+
+      // System health card
+      const ok = d.status === 'ok';
+      set('sv-health', ok ? 'OK' : 'Degraded');
+      document.getElementById('sc-health').style.borderColor = ok ? '#1D9E75' : '#E24B4A';
+      set('ss-health', `DB: ${d.details.database?.status ?? '?'} | Redis: ${d.details.redis?.status ?? '?'}`);
+
+      // Model banner
+      const models = d.details.models || {};
+      const banner = document.getElementById('model-banner');
+      if (!models.analysis_ready) {
+        banner.style.display = 'block';
+        banner.style.background = '#FAEEDA';
+        banner.style.color = '#633806';
+        banner.style.border = '1px solid #EF9F27';
+        banner.innerHTML = `
+          <strong>Models not downloaded yet.</strong>
+          NER: ${models.ner ?? '?'} &nbsp;|&nbsp;
+          Summarizer: ${models.summarizer ?? '?'} &nbsp;|&nbsp;
+          Fine-tuned: ${models.finetuned ?? '?'}<br>
+          Run: <code style="background:#fff3d4;padding:2px 6px;border-radius:3px;">
+            python manage.py download_models
+          </code>
+        `;
+      } else {
+        banner.style.display = 'block';
+        banner.style.background = '#E1F5EE';
+        banner.style.color = '#085041';
+        banner.style.border = '1px solid #5DCAA5';
+        banner.innerHTML = `Models ready. Fine-tuned: ${models.finetuned}`;
+      }
+
+      // Lab reports card
+      const lr = d.details.database;
+      if (lr) {
+        set('sv-reports', lr.reports_count ?? '—');
+        set('ss-reports', `SQLite · ${lr.status}`);
+      }
+
+      // Training card (from health endpoint)
+      const tr = d.details.training;
+      if (tr) {
+        set('sv-auto', tr.auto_training ? 'Enabled' : 'Disabled');
+        set('ss-auto', `Threshold: ${tr.threshold} samples`);
+      }
+
+    } catch (e) {
+      set('sv-health', 'Error');
+      set('ss-health', e.message);
+    }
+  }
+
+  async function loadTrainingStats() {
+    try {
+      const d = await fetchJSON('/api/training/stats/');
+      const t  = d.training_data;
+      const ft = d.finetuning;
+      const at = d.auto_training;
+
+      set('sv-training', t.total_processed);
+      set('ss-training', `${t.from_user_uploads} user · ${t.from_admin} admin`);
+
+      set('sv-reviewed', t.doctor_reviewed);
+      set('ss-reviewed', `${t.pending_review} pending review`);
+
+      set('sv-jobs', ft.total_jobs);
+      set('ss-jobs', `${ft.completed_jobs} done · ${ft.running_jobs} running`);
+
+      // Progress bar
+      const samples    = at.samples_since_last;
+      const threshold  = at.threshold;
+      const pct        = Math.min(100, Math.round(samples / threshold * 100));
+      const wrap       = document.getElementById('training-progress-wrap');
+      if (wrap && at.enabled) {
+        wrap.style.display = 'block';
+        document.getElementById('progress-bar').style.width = pct + '%';
+        document.getElementById('progress-label').textContent =
+          `${samples} / ${threshold} new samples (${pct}%)`;
+      }
+
+    } catch (e) {
+      // Training stats need admin auth — silently ignore if not loaded
+      console.debug('Training stats not available:', e.message);
+    }
+  }
+
+  // Load both on page ready
+  document.addEventListener('DOMContentLoaded', () => {
+    loadHealth();
+    loadTrainingStats();
+  });
+})();
+</script>
+
+{% endblock %}
