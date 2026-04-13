@@ -5,28 +5,29 @@ from django.conf.urls.static import static
 from django.http import JsonResponse
 from django.utils import timezone
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from frontend_view import frontend_view
 
-admin.site.site_header  = 'MedLab Administration'
-admin.site.site_title   = 'MedLab Admin'
-admin.site.index_title  = 'MedLab Control Panel'
+admin.site.site_header  = getattr(settings, 'ADMIN_SITE_HEADER', 'MedLab Administration')
+admin.site.site_title   = getattr(settings, 'ADMIN_SITE_TITLE',  'MedLab Admin')
+admin.site.index_title  = getattr(settings, 'ADMIN_INDEX_TITLE', 'MedLab Control Panel')
 
 
 def health_check(request):
-    from django.db import connection
     from pathlib import Path
     try:
+        from django.db import connection
         connection.ensure_connection()
         from reports.models import LabReport
-        db_ok = True
-        report_count = LabReport.objects.count()
+        db_ok     = True
+        rpt_count = LabReport.objects.count()
     except Exception:
-        db_ok = False
-        report_count = 0
+        db_ok     = False
+        rpt_count = 0
 
     try:
         import redis as redis_lib
-        r = redis_lib.from_url(settings.CELERY_BROKER_URL, socket_connect_timeout=2)
-        r.ping()
+        redis_lib.from_url(settings.CELERY_BROKER_URL,
+                           socket_connect_timeout=2).ping()
         redis_ok = True
     except Exception:
         redis_ok = False
@@ -39,11 +40,11 @@ def health_check(request):
         'timestamp': timezone.now().isoformat(),
         'version':   '1.0.0',
         'details': {
-            'database': {'status': 'ok' if db_ok else 'error', 'reports_count': report_count},
+            'database': {'status': 'ok' if db_ok else 'error', 'reports_count': rpt_count},
             'redis':    {'status': 'ok' if redis_ok else 'error'},
             'models':   {
-                'ner':            'ok' if ner_ok  else 'missing',
-                'summarizer':     'ok' if summ_ok else 'missing',
+                'ner':            'ok' if ner_ok  else 'missing — run download_models',
+                'summarizer':     'ok' if summ_ok else 'missing — run download_models',
                 'analysis_ready': ner_ok and summ_ok,
             },
         },
@@ -51,6 +52,7 @@ def health_check(request):
 
 
 urlpatterns = [
+    path('',                         frontend_view,                  name='frontend'),
     path('admin/',                   admin.site.urls),
     path('api/health/',              health_check,                   name='health-check'),
     path('api/auth/token/',          TokenObtainPairView.as_view(),  name='token_obtain_pair'),
