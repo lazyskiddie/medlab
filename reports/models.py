@@ -15,11 +15,13 @@ class LabReport(models.Model):
         FAILED     = 'failed',     'Failed'
 
     id             = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    uploaded_by    = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reports')
+    uploaded_by    = models.ForeignKey(settings.AUTH_USER_MODEL,
+                                       on_delete=models.CASCADE, related_name='reports')
     file           = models.FileField(upload_to=report_upload_path)
     file_type      = models.CharField(max_length=10, blank=True)
     original_name  = models.CharField(max_length=255, blank=True)
-    status         = models.CharField(max_length=15, choices=Status.choices, default=Status.PENDING)
+    status         = models.CharField(max_length=15, choices=Status.choices,
+                                      default=Status.PENDING)
     celery_task_id = models.CharField(max_length=255, blank=True)
     uploaded_at    = models.DateTimeField(auto_now_add=True)
     updated_at     = models.DateTimeField(auto_now=True)
@@ -33,7 +35,8 @@ class LabReport(models.Model):
 
 class AnalysisResult(models.Model):
     id                  = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    report              = models.OneToOneField(LabReport, on_delete=models.CASCADE, related_name='result')
+    report              = models.OneToOneField(LabReport, on_delete=models.CASCADE,
+                                               related_name='result')
     raw_text            = models.TextField(blank=True)
     extracted_values    = models.JSONField(default=dict)
     flagged_items       = models.JSONField(default=list)
@@ -48,4 +51,4 @@ class AnalysisResult(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Result for {self.report_id}'
+        return f'Result for report {self.report_id}'

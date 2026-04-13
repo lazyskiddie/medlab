@@ -8,7 +8,7 @@ from .serializers import LabReportSerializer, LabReportUploadSerializer
 from analysis.tasks import run_analysis_pipeline
 
 ALLOWED_TYPES = {'image/jpeg', 'image/jpg', 'image/png', 'application/pdf'}
-MAX_SIZE = 20 * 1024 * 1024
+MAX_FILE_SIZE = 20 * 1024 * 1024
 
 
 def _make_report(file, user):
@@ -47,12 +47,15 @@ class BulkUploadReportView(APIView):
         for file in files:
             if file.content_type not in ALLOWED_TYPES:
                 rejected.append({'name': file.name, 'reason': 'Unsupported type'}); continue
-            if file.size > MAX_SIZE:
+            if file.size > MAX_FILE_SIZE:
                 rejected.append({'name': file.name, 'reason': 'Exceeds 20MB'}); continue
             report = _make_report(file, request.user)
             created.append({'id': str(report.id), 'original_name': report.original_name})
-        return Response({'submitted': len(created), 'rejected': len(rejected),
-                         'reports': created, 'errors': rejected}, status=status.HTTP_201_CREATED)
+        return Response(
+            {'submitted': len(created), 'rejected': len(rejected),
+             'reports': created, 'errors': rejected},
+            status=status.HTTP_201_CREATED if created else status.HTTP_400_BAD_REQUEST,
+        )
 
 
 class ReportListView(generics.ListAPIView):
@@ -62,7 +65,8 @@ class ReportListView(generics.ListAPIView):
     def get_queryset(self):
         qs = LabReport.objects.all() if self.request.user.is_staff \
              else LabReport.objects.filter(uploaded_by=self.request.user)
-        s = self.request.query_params.get('status')
+        qs = qs.select_related('result')
+        s  = self.request.query_params.get('status')
         return qs.filter(status=s) if s else qs
 
 
@@ -71,8 +75,14 @@ class ReportDetailView(generics.RetrieveDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return LabReport.objects.all() if self.request.user.is_staff \
-               else LabReport.objects.filter(uploaded_by=self.request.user)
+        return LabReport.objects.all().select_related('result') if self.request.user.is_staff \
+               else LabReport.objects.filter(uploaded_by=self.request.user).select_related('result')
 
     def get_object(self):
         return get_object_or_404(self.get_queryset(), pk=self.kwargs['pk'])
+
+    def perform_destroy(self, instance):
+        if instance.file:
+            try: instance.file.delete(save=False)
+            except Exception: pass
+        instance.delete()
