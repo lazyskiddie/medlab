@@ -14,22 +14,20 @@ class TrainingReportListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAdminUser]
 
     def get_queryset(self):
-        qs       = super().get_queryset()
-        source   = self.request.query_params.get('source')
-        reviewed = self.request.query_params.get('reviewed')
-        if source:
-            qs = qs.filter(source=source)
-        if reviewed is not None:
-            qs = qs.filter(is_doctor_reviewed=reviewed.lower() == 'true')
+        qs = super().get_queryset()
+        s  = self.request.query_params.get('source')
+        r  = self.request.query_params.get('reviewed')
+        if s: qs = qs.filter(source=s)
+        if r is not None: qs = qs.filter(is_doctor_reviewed=r.lower()=='true')
         return qs
 
     def perform_create(self, serializer):
         file = self.request.data.get('file')
         ct   = getattr(file, 'content_type', '')
         ft   = 'pdf' if 'pdf' in ct else 'image'
-        instance = serializer.save(uploaded_by=self.request.user,
-                                   file_type=ft, source=TrainingReport.Source.ADMIN)
-        ocr_training_report.delay(str(instance.id))
+        inst = serializer.save(uploaded_by=self.request.user,
+                               file_type=ft, source=TrainingReport.Source.ADMIN)
+        ocr_training_report.delay(str(inst.id))
 
 
 class MarkReviewedView(APIView):
@@ -37,12 +35,9 @@ class MarkReviewedView(APIView):
 
     def post(self, request, pk):
         tr = get_object_or_404(TrainingReport, pk=pk)
-        if 'correct_summary' in request.data:
-            tr.correct_summary = request.data['correct_summary']
-        if 'correct_conditions' in request.data:
-            tr.correct_conditions = request.data['correct_conditions']
-        if 'correct_severity' in request.data:
-            tr.correct_severity = request.data['correct_severity']
+        if 'correct_summary'    in request.data: tr.correct_summary    = request.data['correct_summary']
+        if 'correct_conditions' in request.data: tr.correct_conditions = request.data['correct_conditions']
+        if 'correct_severity'   in request.data: tr.correct_severity   = request.data['correct_severity']
         tr.is_doctor_reviewed = True
         tr.reviewed_by        = request.user
         tr.reviewed_at        = timezone.now()
@@ -65,9 +60,9 @@ class StartFineTuningView(APIView):
     def post(self, request, job_id):
         job = get_object_or_404(FineTuningJob, id=job_id)
         if job.status == FineTuningJob.JobStatus.RUNNING:
-            return Response({'error': 'Job is already running.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Job already running.'}, status=status.HTTP_400_BAD_REQUEST)
         trigger_finetuning.delay(str(job.id))
-        return Response({'message': 'Fine-tuning job queued.', 'job_id': str(job.id)})
+        return Response({'message': 'Fine-tuning queued.', 'job_id': str(job.id)})
 
 
 class TrainingStatsView(APIView):
@@ -97,9 +92,8 @@ class TrainingStatsView(APIView):
                 'running_jobs':   FineTuningJob.objects.filter(status='running').count(),
             },
             'auto_training': {
-                'enabled':               config.auto_training_enabled,
-                'threshold':             config.new_samples_threshold,
-                'samples_since_last':    total.count() - config.samples_at_last_trigger,
-                'last_trigger':          config.last_auto_trigger_at,
+                'enabled':            config.auto_training_enabled,
+                'threshold':          config.new_samples_threshold,
+                'samples_since_last': total.count() - config.samples_at_last_trigger,
             },
         })

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import TrainingReport, FineTuningJob, AutoTrainingConfig
+from .models import TrainingReport, FineTuningJob
 
 
 class TrainingReportSerializer(serializers.ModelSerializer):
