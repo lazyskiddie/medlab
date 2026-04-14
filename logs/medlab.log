@@ -1,0 +1,63 @@
+[2026-04-13 17:24:11,754] INFO django.utils.autoreload — Watching for file changes with StatReloader
+[2026-04-13 17:25:26,556] INFO django.server — "GET /admin/ HTTP/1.1" 302 0
+[2026-04-13 17:25:26,622] INFO django.server — "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4176
+[2026-04-13 17:25:26,790] INFO django.server — "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2694
+[2026-04-13 17:25:26,790] INFO django.server — "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+[2026-04-13 17:25:26,792] INFO django.server — "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2929
+[2026-04-13 17:25:26,792] INFO django.server — "GET /static/admin/css/login.css HTTP/1.1" 200 958
+[2026-04-13 17:25:26,793] INFO django.server — "GET /static/admin/css/base.css HTTP/1.1" 200 21310
+[2026-04-13 17:25:26,794] INFO django.server — "GET /static/admin/js/theme.js HTTP/1.1" 200 1943
+[2026-04-13 17:25:26,795] INFO django.server — "GET /static/admin/css/responsive.css HTTP/1.1" 200 18559
+[2026-04-13 17:25:27,050] WARNING django.request — Not Found: /apple-touch-icon-precomposed.png
+[2026-04-13 17:25:27,050] WARNING django.server — "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 3289
+[2026-04-13 17:25:27,453] WARNING django.request — Not Found: /favicon.ico
+[2026-04-13 17:25:27,453] WARNING django.server — "GET /favicon.ico HTTP/1.1" 404 3226
+[2026-04-13 17:25:27,657] WARNING django.request — Not Found: /apple-touch-icon.png
+[2026-04-13 17:25:27,658] WARNING django.server — "GET /apple-touch-icon.png HTTP/1.1" 404 3253
+[2026-04-13 17:25:27,761] WARNING django.request — Not Found: /favicon.ico
+[2026-04-13 17:25:27,762] WARNING django.server — "GET /favicon.ico HTTP/1.1" 404 3226
+[2026-04-13 17:26:00,459] INFO django.server — "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+[2026-04-13 17:26:00,481] INFO django.server — "GET /admin/ HTTP/1.1" 200 12494
+[2026-04-13 17:26:00,500] INFO django.server — "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+[2026-04-13 17:26:00,529] INFO django.server — "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+[2026-04-13 17:26:00,530] INFO django.server — "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+[2026-04-13 17:26:27,199] ERROR django.request — Internal Server Error: /
+Traceback (most recent call last):
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/singhsandeepkumarvinodkumar/env/bin/MEDLAB/frontend_view.py", line 6, in frontend_view
+    return HttpResponse(html_path.read_text(), content_type='text/html')
+                        ~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/pathlib/_local.py", line 546, in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/pathlib/_abc.py", line 632, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/pathlib/_local.py", line 537, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/singhsandeepkumarvinodkumar/env/bin/MEDLAB/templates/frontend.html'
+[2026-04-13 17:26:27,205] ERROR django.server — "GET / HTTP/1.1" 500 88451
+[2026-04-13 17:27:53,990] ERROR django.request — Internal Server Error: /
+Traceback (most recent call last):
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/singhsandeepkumarvinodkumar/env/bin/MEDLAB/frontend_view.py", line 6, in frontend_view
+    return HttpResponse(html_path.read_text(), content_type='text/html')
+                        ~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/pathlib/_local.py", line 546, in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/pathlib/_abc.py", line 632, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/pathlib/_local.py", line 537, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/singhsandeepkumarvinodkumar/env/bin/MEDLAB/templates/frontend.html'
+[2026-04-13 17:27:53,995] ERROR django.server — "GET / HTTP/1.1" 500 88294
