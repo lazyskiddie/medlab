@@ -136,3 +136,141 @@ Traceback (most recent call last):
   File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/pytesseract/pytesseract.py", line 280, in run_tesseract
     raise TesseractNotFoundError()
 pytesseract.pytesseract.TesseractNotFoundError: /usr/bin/tesseract is not installed or it's not in your PATH. See README file for more information.
+[2026-04-14 10:44:20,850] ERROR analysis.ocr — OCR image error: /usr/bin/tesseract is not installed or it's not in your PATH. See README file for more information.
+[2026-04-14 10:44:20,852] ERROR analysis.tasks — [1c93c28f-c083-4659-8a10-32ed059f42f9] Pipeline failed: /usr/bin/tesseract is not installed or it's not in your PATH. See README file for more information.
+Traceback (most recent call last):
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/pytesseract/pytesseract.py", line 275, in run_tesseract
+    proc = subprocess.Popen(cmd_args, **subprocess_args())
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1038, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1974, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/bin/tesseract'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/singhsandeepkumarvinodkumar/env/bin/MEDLAB/analysis/tasks.py", line 25, in run_analysis_pipeline
+    raw_text    = extract_text(report.file.path, report.file_type)
+  File "/Users/singhsandeepkumarvinodkumar/env/bin/MEDLAB/analysis/ocr.py", line 76, in extract_text
+    return ocr_from_image(str(file_path))
+  File "/Users/singhsandeepkumarvinodkumar/env/bin/MEDLAB/analysis/ocr.py", line 44, in ocr_from_image
+    return pytesseract.image_to_string(processed, config=r'--oem 3 --psm 6').strip()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/pytesseract/pytesseract.py", line 486, in image_to_string
+    return {
+           ~
+    ...<2 lines>...
+        Output.STRING: lambda: run_and_get_output(*args),
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }[output_type]()
+    ~~~~~~~~~~~~~~^^
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/pytesseract/pytesseract.py", line 489, in <lambda>
+    Output.STRING: lambda: run_and_get_output(*args),
+                           ~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+    ~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/pytesseract/pytesseract.py", line 280, in run_tesseract
+    raise TesseractNotFoundError()
+pytesseract.pytesseract.TesseractNotFoundError: /usr/bin/tesseract is not installed or it's not in your PATH. See README file for more information.
+[2026-04-14 10:44:51,179] ERROR analysis.ocr — OCR image error: /usr/bin/tesseract is not installed or it's not in your PATH. See README file for more information.
+[2026-04-14 10:44:51,181] ERROR analysis.tasks — [1c93c28f-c083-4659-8a10-32ed059f42f9] Pipeline failed: /usr/bin/tesseract is not installed or it's not in your PATH. See README file for more information.
+Traceback (most recent call last):
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/pytesseract/pytesseract.py", line 275, in run_tesseract
+    proc = subprocess.Popen(cmd_args, **subprocess_args())
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1038, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1974, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/bin/tesseract'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/singhsandeepkumarvinodkumar/env/bin/MEDLAB/analysis/tasks.py", line 25, in run_analysis_pipeline
+    raw_text    = extract_text(report.file.path, report.file_type)
+  File "/Users/singhsandeepkumarvinodkumar/env/bin/MEDLAB/analysis/ocr.py", line 76, in extract_text
+    return ocr_from_image(str(file_path))
+  File "/Users/singhsandeepkumarvinodkumar/env/bin/MEDLAB/analysis/ocr.py", line 44, in ocr_from_image
+    return pytesseract.image_to_string(processed, config=r'--oem 3 --psm 6').strip()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/pytesseract/pytesseract.py", line 486, in image_to_string
+    return {
+           ~
+    ...<2 lines>...
+        Output.STRING: lambda: run_and_get_output(*args),
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }[output_type]()
+    ~~~~~~~~~~~~~~^^
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/pytesseract/pytesseract.py", line 489, in <lambda>
+    Output.STRING: lambda: run_and_get_output(*args),
+                           ~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+    ~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/pytesseract/pytesseract.py", line 280, in run_tesseract
+    raise TesseractNotFoundError()
+pytesseract.pytesseract.TesseractNotFoundError: /usr/bin/tesseract is not installed or it's not in your PATH. See README file for more information.
+[2026-04-14 10:45:21,494] ERROR analysis.ocr — OCR image error: /usr/bin/tesseract is not installed or it's not in your PATH. See README file for more information.
+[2026-04-14 10:45:21,496] ERROR analysis.tasks — [1c93c28f-c083-4659-8a10-32ed059f42f9] Pipeline failed: /usr/bin/tesseract is not installed or it's not in your PATH. See README file for more information.
+Traceback (most recent call last):
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/pytesseract/pytesseract.py", line 275, in run_tesseract
+    proc = subprocess.Popen(cmd_args, **subprocess_args())
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1038, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 1974, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/usr/bin/tesseract'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/singhsandeepkumarvinodkumar/env/bin/MEDLAB/analysis/tasks.py", line 25, in run_analysis_pipeline
+    raw_text    = extract_text(report.file.path, report.file_type)
+  File "/Users/singhsandeepkumarvinodkumar/env/bin/MEDLAB/analysis/ocr.py", line 76, in extract_text
+    return ocr_from_image(str(file_path))
+  File "/Users/singhsandeepkumarvinodkumar/env/bin/MEDLAB/analysis/ocr.py", line 44, in ocr_from_image
+    return pytesseract.image_to_string(processed, config=r'--oem 3 --psm 6').strip()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/pytesseract/pytesseract.py", line 486, in image_to_string
+    return {
+           ~
+    ...<2 lines>...
+        Output.STRING: lambda: run_and_get_output(*args),
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }[output_type]()
+    ~~~~~~~~~~~~~~^^
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/pytesseract/pytesseract.py", line 489, in <lambda>
+    Output.STRING: lambda: run_and_get_output(*args),
+                           ~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/pytesseract/pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+    ~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/singhsandeepkumarvinodkumar/env/lib/python3.13/site-packages/pytesseract/pytesseract.py", line 280, in run_tesseract
+    raise TesseractNotFoundError()
+pytesseract.pytesseract.TesseractNotFoundError: /usr/bin/tesseract is not installed or it's not in your PATH. See README file for more information.

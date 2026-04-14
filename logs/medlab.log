@@ -170,3 +170,42 @@ FileNotFoundError: [Errno 2] No such file or directory: '/Users/singhsandeepkuma
 [2026-04-14 01:52:32,886] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
 [2026-04-14 01:52:41,683] INFO django.server — "GET /admin/training/finetuningjob/ HTTP/1.1" 200 12745
 [2026-04-14 01:52:41,695] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-04-14 10:42:41,670] INFO django.utils.autoreload — Watching for file changes with StatReloader
+[2026-04-14 10:43:21,216] INFO django.server — "GET / HTTP/1.1" 200 35090
+[2026-04-14 10:43:21,427] INFO django.server — "GET /api/accounts/profile/ HTTP/1.1" 200 175
+[2026-04-14 10:43:21,443] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 487
+[2026-04-14 10:43:21,796] WARNING django.request — Not Found: /apple-touch-icon-precomposed.png
+[2026-04-14 10:43:21,796] WARNING django.request — Not Found: /favicon.ico
+[2026-04-14 10:43:21,796] WARNING django.server — "GET /favicon.ico HTTP/1.1" 404 3226
+[2026-04-14 10:43:21,797] WARNING django.server — "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 3289
+[2026-04-14 10:43:21,797] WARNING django.request — Not Found: /apple-touch-icon.png
+[2026-04-14 10:43:21,797] WARNING django.server — "GET /apple-touch-icon.png HTTP/1.1" 404 3253
+[2026-04-14 10:43:29,853] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 487
+[2026-04-14 10:43:31,153] INFO django.server — "GET /api/reports/d54b98f7-54e5-4561-9fca-4eeba6396a6e/ HTTP/1.1" 200 435
+[2026-04-14 10:43:41,425] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 487
+[2026-04-14 10:43:43,330] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 487
+[2026-04-14 10:43:44,259] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 487
+[2026-04-14 10:43:45,357] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 487
+[2026-04-14 10:43:46,355] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 487
+[2026-04-14 10:43:46,658] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 487
+[2026-04-14 10:43:46,905] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 487
+[2026-04-14 10:43:47,196] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 487
+[2026-04-14 10:44:18,436] INFO django.server — "POST /api/reports/upload/ HTTP/1.1" 201 441
+[2026-04-14 10:44:19,949] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 950
+[2026-04-14 10:44:22,455] INFO django.server — "GET /api/analysis/status/1c93c28f-c083-4659-8a10-32ed059f42f9/ HTTP/1.1" 200 70
+[2026-04-14 10:47:15,977] INFO django.server — "GET /api/reports/1c93c28f-c083-4659-8a10-32ed059f42f9/ HTTP/1.1" 200 461
+[2026-04-14 10:57:07,703] INFO django.server — "GET / HTTP/1.1" 200 35090
+[2026-04-14 10:57:08,185] INFO django.server — "GET /api/accounts/profile/ HTTP/1.1" 200 175
+[2026-04-14 10:57:08,210] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 949
+[2026-04-14 10:57:10,559] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 949
+[2026-04-14 10:57:11,690] INFO django.server — "GET /api/reports/1c93c28f-c083-4659-8a10-32ed059f42f9/ HTTP/1.1" 200 461
+[2026-04-14 10:57:13,900] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 949
+[2026-04-14 10:57:15,295] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 949
+[2026-04-14 10:57:15,860] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 949
+[2026-04-14 10:57:16,323] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 949
+[2026-04-14 10:57:16,805] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 949
+[2026-04-14 10:57:17,295] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 949
+[2026-04-14 10:57:17,720] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 949
+[2026-04-14 10:57:18,236] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 949
+[2026-04-14 10:57:18,690] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 949
+[2026-04-14 10:57:19,124] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 949
