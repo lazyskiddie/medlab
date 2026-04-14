@@ -61,3 +61,112 @@ Traceback (most recent call last):
            ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 FileNotFoundError: [Errno 2] No such file or directory: '/Users/singhsandeepkumarvinodkumar/env/bin/MEDLAB/templates/frontend.html'
 [2026-04-13 17:27:53,995] ERROR django.server — "GET / HTTP/1.1" 500 88294
+[2026-04-14 01:32:35,740] INFO django.utils.autoreload — Watching for file changes with StatReloader
+[2026-04-14 01:33:17,466] INFO django.server — "GET / HTTP/1.1" 200 35090
+[2026-04-14 01:33:18,033] WARNING django.request — Not Found: /apple-touch-icon-precomposed.png
+[2026-04-14 01:33:18,033] WARNING django.request — Not Found: /favicon.ico
+[2026-04-14 01:33:18,034] WARNING django.request — Not Found: /apple-touch-icon-precomposed.png
+[2026-04-14 01:33:18,035] WARNING django.server — "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 3289
+[2026-04-14 01:33:18,034] WARNING django.request — Not Found: /apple-touch-icon.png
+[2026-04-14 01:33:18,034] WARNING django.server — "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 3289
+[2026-04-14 01:33:18,036] WARNING django.server — "GET /apple-touch-icon.png HTTP/1.1" 404 3253
+[2026-04-14 01:33:18,036] WARNING django.server — "GET /favicon.ico HTTP/1.1" 404 3226
+[2026-04-14 01:33:18,211] WARNING django.request — Not Found: /apple-touch-icon.png
+[2026-04-14 01:33:18,211] WARNING django.server — "GET /apple-touch-icon.png HTTP/1.1" 404 3253
+[2026-04-14 01:33:18,299] WARNING django.request — Not Found: /favicon.ico
+[2026-04-14 01:33:18,299] WARNING django.server — "GET /favicon.ico HTTP/1.1" 404 3226
+[2026-04-14 01:35:22,284] INFO django.server — "POST /api/accounts/register/ HTTP/1.1" 201 168
+[2026-04-14 01:35:22,929] INFO django.server — "POST /api/auth/token/ HTTP/1.1" 200 489
+[2026-04-14 01:35:22,939] INFO django.server — "GET /api/accounts/profile/ HTTP/1.1" 200 175
+[2026-04-14 01:35:22,948] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 52
+[2026-04-14 01:35:28,446] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 52
+[2026-04-14 01:41:31,261] INFO django.server — "POST /api/reports/upload/ HTTP/1.1" 201 415
+[2026-04-14 01:41:32,785] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 488
+[2026-04-14 01:41:35,278] INFO django.server — "GET /api/analysis/status/d54b98f7-54e5-4561-9fca-4eeba6396a6e/ HTTP/1.1" 200 71
+[2026-04-14 01:41:39,279] INFO django.server — "GET /api/analysis/status/d54b98f7-54e5-4561-9fca-4eeba6396a6e/ HTTP/1.1" 200 71
+[2026-04-14 01:41:43,286] INFO django.server — "GET /api/analysis/status/d54b98f7-54e5-4561-9fca-4eeba6396a6e/ HTTP/1.1" 200 71
+[2026-04-14 01:41:47,283] INFO django.server — "GET /api/analysis/status/d54b98f7-54e5-4561-9fca-4eeba6396a6e/ HTTP/1.1" 200 71
+[2026-04-14 01:41:51,283] INFO django.server — "GET /api/analysis/status/d54b98f7-54e5-4561-9fca-4eeba6396a6e/ HTTP/1.1" 200 71
+[2026-04-14 01:41:55,283] INFO django.server — "GET /api/analysis/status/d54b98f7-54e5-4561-9fca-4eeba6396a6e/ HTTP/1.1" 200 71
+[2026-04-14 01:41:59,300] INFO django.server — "GET /api/analysis/status/d54b98f7-54e5-4561-9fca-4eeba6396a6e/ HTTP/1.1" 200 71
+[2026-04-14 01:42:03,326] INFO django.server — "GET /api/analysis/status/d54b98f7-54e5-4561-9fca-4eeba6396a6e/ HTTP/1.1" 200 70
+[2026-04-14 01:48:31,695] INFO django.server — "GET /api/reports/d54b98f7-54e5-4561-9fca-4eeba6396a6e/ HTTP/1.1" 200 435
+[2026-04-14 01:49:46,454] INFO django.server — "GET /admin/ HTTP/1.1" 302 0
+[2026-04-14 01:49:46,490] INFO django.server — "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4176
+[2026-04-14 01:49:46,877] INFO django.server — "GET /static/admin/css/base.css HTTP/1.1" 200 21310
+[2026-04-14 01:49:46,878] INFO django.server — "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2694
+[2026-04-14 01:49:46,878] INFO django.server — "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2929
+[2026-04-14 01:49:46,879] INFO django.server — "GET /static/admin/css/login.css HTTP/1.1" 200 958
+[2026-04-14 01:49:46,879] INFO django.server — "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+[2026-04-14 01:49:46,880] INFO django.server — "GET /static/admin/js/theme.js HTTP/1.1" 200 1943
+[2026-04-14 01:49:46,880] INFO django.server — "GET /static/admin/css/responsive.css HTTP/1.1" 200 18559
+[2026-04-14 01:49:59,385] INFO django.server — "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+[2026-04-14 01:49:59,405] INFO django.server — "GET /admin/ HTTP/1.1" 200 18762
+[2026-04-14 01:49:59,416] INFO django.server — "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+[2026-04-14 01:49:59,451] WARNING django.request — Unauthorized: /api/training/stats/
+[2026-04-14 01:49:59,452] WARNING django.server — "GET /api/training/stats/ HTTP/1.1" 401 58
+[2026-04-14 01:49:59,457] INFO django.server — "GET /api/health/ HTTP/1.1" 200 244
+[2026-04-14 01:49:59,465] INFO django.server — "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+[2026-04-14 01:49:59,466] INFO django.server — "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+[2026-04-14 01:50:24,670] INFO django.server — "GET /admin/reports/labreport/ HTTP/1.1" 200 16199
+[2026-04-14 01:50:25,041] INFO django.server — "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+[2026-04-14 01:50:25,044] INFO django.server — "GET /static/admin/js/core.js HTTP/1.1" 200 5682
+[2026-04-14 01:50:25,045] INFO django.server — "GET /static/admin/css/changelists.css HTTP/1.1" 200 6566
+[2026-04-14 01:50:25,046] INFO django.server — "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 8943
+[2026-04-14 01:50:25,052] INFO django.server — "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+[2026-04-14 01:50:25,053] INFO django.server — "GET /static/admin/js/actions.js HTTP/1.1" 200 7872
+[2026-04-14 01:50:25,054] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-04-14 01:50:25,054] INFO django.server — "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+[2026-04-14 01:50:25,057] INFO django.server — "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+[2026-04-14 01:50:25,058] INFO django.server — "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 292458
+[2026-04-14 01:50:25,059] INFO django.server — "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 232381
+[2026-04-14 01:50:25,061] INFO django.server — "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+[2026-04-14 01:50:25,099] INFO django.server — "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+[2026-04-14 01:50:25,100] INFO django.server — "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+[2026-04-14 01:50:30,169] INFO django.server — "GET /media/reports/2/5039a9b6-e6e1-4d5c-aaa9-20617537d56a_PHOTO-2026-04-14-07-11-02.jpg HTTP/1.1" 200 187463
+[2026-04-14 01:50:42,921] INFO django.server — "GET /admin/training/trainingreport/ HTTP/1.1" 200 14076
+[2026-04-14 01:50:43,232] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-04-14 01:50:47,119] INFO django.server — "GET /admin/training/trainingreport/add/ HTTP/1.1" 200 21286
+[2026-04-14 01:50:47,429] INFO django.server — "GET /static/admin/css/forms.css HTTP/1.1" 200 9090
+[2026-04-14 01:50:47,430] INFO django.server — "GET /static/admin/js/collapse.js HTTP/1.1" 200 1803
+[2026-04-14 01:50:47,430] INFO django.server — "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+[2026-04-14 01:50:47,431] INFO django.server — "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+[2026-04-14 01:50:47,435] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-04-14 01:50:47,436] INFO django.server — "GET /static/admin/css/widgets.css HTTP/1.1" 200 11921
+[2026-04-14 01:50:47,439] INFO django.server — "GET /static/admin/img/icon-no.svg HTTP/1.1" 200 560
+[2026-04-14 01:51:05,609] INFO django.server — "GET / HTTP/1.1" 200 35090
+[2026-04-14 01:51:05,644] INFO django.server — "GET /api/accounts/profile/ HTTP/1.1" 200 175
+[2026-04-14 01:51:05,663] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 487
+[2026-04-14 01:51:09,475] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 487
+[2026-04-14 01:51:11,670] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 487
+[2026-04-14 01:51:13,157] INFO django.server — "GET /api/reports/ HTTP/1.1" 200 487
+[2026-04-14 01:51:28,245] INFO django.server — "GET /admin/auth/group/ HTTP/1.1" 200 12437
+[2026-04-14 01:51:28,545] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-04-14 01:51:30,134] INFO django.server — "GET /admin/accounts/user/ HTTP/1.1" 200 16143
+[2026-04-14 01:51:30,520] INFO django.server — "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+[2026-04-14 01:51:30,522] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-04-14 01:51:43,081] INFO django.server — "GET /admin/django_celery_results/groupresult/ HTTP/1.1" 200 13472
+[2026-04-14 01:51:43,393] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-04-14 01:51:44,675] INFO django.server — "GET /admin/django_celery_results/taskresult/ HTTP/1.1" 200 17015
+[2026-04-14 01:51:44,990] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-04-14 01:51:48,326] INFO django.server — "GET /admin/django_celery_beat/clockedschedule/ HTTP/1.1" 200 12178
+[2026-04-14 01:51:48,619] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-04-14 01:51:49,991] INFO django.server — "GET /admin/django_celery_beat/crontabschedule/ HTTP/1.1" 200 14488
+[2026-04-14 01:51:50,297] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-04-14 01:51:58,045] INFO django.server — "GET /admin/django_celery_beat/intervalschedule/ HTTP/1.1" 200 12187
+[2026-04-14 01:51:58,340] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-04-14 01:51:59,840] INFO django.server — "GET /admin/django_celery_beat/periodictask/ HTTP/1.1" 200 20225
+[2026-04-14 01:52:00,152] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-04-14 01:52:07,856] INFO django.server — "GET /admin/django_celery_beat/solarschedule/ HTTP/1.1" 200 12196
+[2026-04-14 01:52:08,147] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-04-14 01:52:10,054] INFO django.server — "GET /admin/reports/analysisresult/ HTTP/1.1" 200 13056
+[2026-04-14 01:52:10,352] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-04-14 01:52:11,854] INFO django.server — "GET /admin/reports/labreport/ HTTP/1.1" 200 16199
+[2026-04-14 01:52:11,865] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-04-14 01:52:14,309] INFO django.server — "GET /admin/training/autotrainingconfig/ HTTP/1.1" 200 13385
+[2026-04-14 01:52:27,410] INFO django.server — "GET /admin/training/finetuningjob/ HTTP/1.1" 200 12745
+[2026-04-14 01:52:27,705] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-04-14 01:52:32,877] INFO django.server — "GET /admin/training/trainingreport/ HTTP/1.1" 200 14076
+[2026-04-14 01:52:32,886] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+[2026-04-14 01:52:41,683] INFO django.server — "GET /admin/training/finetuningjob/ HTTP/1.1" 200 12745
+[2026-04-14 01:52:41,695] INFO django.server — "GET /admin/jsi18n/ HTTP/1.1" 200 3343
