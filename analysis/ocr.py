@@ -9,39 +9,9 @@ import os
 
 logger = logging.getLogger(__name__)
 
-
-def _set_tesseract_cmd():
-    """
-    Set Tesseract path fresh every call.
-    Priority:
-      1. TESSERACT_CMD environment variable
-      2. Django settings.TESSERACT_CMD
-      3. Common Mac/Linux hardcoded paths
-      4. Falls back to PATH
-    """
-    cmd = os.environ.get('TESSERACT_CMD', '').strip()
-
-    if not cmd:
-        try:
-            from django.conf import settings
-            cmd = str(getattr(settings, 'TESSERACT_CMD', '')).strip()
-        except Exception:
-            pass
-
-    if not cmd:
-        candidates = [
-            '/opt/homebrew/bin/tesseract',
-            '/usr/local/bin/tesseract',
-            '/usr/bin/tesseract',
-        ]
-        for p in candidates:
-            if Path(p).exists():
-                cmd = p
-                break
-
-    if cmd:
-        pytesseract.pytesseract.tesseract_cmd = cmd
-        logger.debug(f'Tesseract set to: {cmd}')
+# Hardcoded correct path for Mac with Homebrew
+# Change this if you are on Linux: /usr/bin/tesseract
+pytesseract.pytesseract.tesseract_cmd = '/opt/homebrew/bin/tesseract'
 
 
 def preprocess_image(image_array: np.ndarray) -> np.ndarray:
@@ -80,7 +50,6 @@ def preprocess_image(image_array: np.ndarray) -> np.ndarray:
 
 
 def ocr_from_image(file_path: str) -> str:
-    _set_tesseract_cmd()
     try:
         img = cv2.imread(file_path)
         if img is None:
@@ -95,9 +64,7 @@ def ocr_from_image(file_path: str) -> str:
 
 
 def ocr_from_pdf(file_path: str) -> str:
-    _set_tesseract_cmd()
     texts = []
-
     try:
         with pdfplumber.open(file_path) as pdf:
             for page in pdf.pages:
