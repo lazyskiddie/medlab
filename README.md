@@ -347,22 +347,7 @@ Add to crontab for daily automated backup:
 - [x] JWT authentication with token refresh
 - [x] Admin dashboard with live system stats
 
-### Suggested improvements
 
-#### Accuracy improvements
-- **More reference ranges** — add HbA1c trends, ferritin, folate, PSA, cortisol
-- **Age-specific ranges** — children and elderly have different normal ranges
-- **Unit conversion** — some labs report in mmol/L vs mg/dL; auto-detect and convert
-- **Multi-language OCR** — add Hindi, Tamil, Telugu language packs to Tesseract for Indian lab reports
-- **Better image preprocessing** — add brightness/contrast normalisation for dark phone photos
-
-#### Features to add
-- **Trend graphs** — show how values change across multiple uploads over time
-- **Doctor portal** — separate login for doctors to review all patient reports
-- **Email notifications** — email patient when analysis is complete or critical values found
-- **Report comparison** — side-by-side view of two reports to see changes
-- **Bulk import** — admin can upload a folder of lab reports at once for training
-- **DICOM support** — some labs export DICOM format, not just JPEG/PDF
 
 #### Performance improvements
 - **GPU inference** — if a GPU is available, FLAN-T5 runs 10× faster
@@ -405,7 +390,3 @@ Add to crontab for daily automated backup:
 | `SUMMARIZER_MODEL_NAME` | `google/flan-t5-base` | HuggingFace summariser model |
 
 ---
-
-## Licence
-
-MIT — free to use, modify and distribute.
