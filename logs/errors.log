@@ -413,3 +413,4 @@ pytesseract.pytesseract.TesseractNotFoundError: /usr/bin/tesseract is not instal
 [2026-04-14 15:20:08,576] ERROR analysis.ocr — OCR image error: /usr/bin/tesseract is not installed or it's not in your PATH. See README file for more information.
 [2026-04-14 15:22:33,831] ERROR analysis.ocr — OCR image error: /usr/bin/tesseract is not installed or it's not in your PATH. See README file for more information.
 [2026-04-14 15:23:08,987] ERROR analysis.ocr — OCR image error: /usr/bin/tesseract is not installed or it's not in your PATH. See README file for more information.
+[2026-04-15 01:58:43,271] ERROR analysis.nlp — Summarizer load failed: Unrecognized model in /Users/singhsandeepkumarvinodkumar/env/bin/MEDLAB/ml_models/summarizer. Should have a `model_type` key in its config.json.
